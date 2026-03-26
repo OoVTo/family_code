@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philippine Family Code · Marriage Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson:    #9B1C1C;
+    --crimson-dk: #5C0A0A;
+    --crimson-lt: #C0392B;
+    --gold:       #C9962A;
+    --gold-lt:    #E8B84B;
+    --cream:      #FFF9F0;
+    --off-white:  #F5EDE0;
+    --void-col:   #7B0000;
+    --void-bg:    #FFE8E8;
+    --void-border:#C0392B;
+    --voidable-col:#7A4A00;
+    --voidable-bg: #FFF4D6;
+    --voidable-border:#C9962A;
+    --valid-col:  #0A4A1A;
+    --valid-bg:   #E6F5EB;
+    --valid-border:#2E7D32;
+    --card-w: 340px;
+    --card-h: 480px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    min-height:100vh;
+    font-family:'Crimson Text', Georgia, serif;
+    background:#1a0000;
+    color:#1a0000;
+    overflow-x:hidden;
+  }
+
+  /* ── ANIMATED BACKGROUND ── */
+  #bg-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+  .bg-gradient {
+    position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse at 20% 30%, #3d0000 0%, #1a0000 40%, #0d0000 100%);
+    animation: bgShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes bgShift {
+    0%   { background: radial-gradient(ellipse at 20% 30%, #3d0000 0%, #1a0000 40%, #0d0000 100%); }
+    33%  { background: radial-gradient(ellipse at 70% 60%, #4a0a0a 0%, #1a0000 50%, #0d0000 100%); }
+    66%  { background: radial-gradient(ellipse at 50% 20%, #3a0808 0%, #1d0000 40%, #0a0000 100%); }
+    100% { background: radial-gradient(ellipse at 80% 80%, #420000 0%, #1a0000 45%, #0d0000 100%); }
+  }
+
+  /* ── HEADER ── */
+  header {
+    position:relative; z-index:10;
+    text-align:center;
+    padding:56px 24px 32px;
+  }
+  .header-crest {
+    display:inline-block;
+    width:64px; height:64px;
+    background: conic-gradient(from 0deg, var(--gold), var(--gold-lt), var(--gold), var(--gold-lt), var(--gold));
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    margin-bottom:16px;
+    animation: crestSpin 20s linear infinite;
+    filter: drop-shadow(0 0 12px rgba(201,150,42,0.7));
+  }
+  @keyframes crestSpin { to { filter: drop-shadow(0 0 16px rgba(201,150,42,0.9)) brightness(1.1); } }
+
+  header h1 {
+    font-family:'Cinzel', serif;
+    font-size:clamp(1.6rem, 4vw, 2.8rem);
+    color:var(--gold-lt);
+    letter-spacing:0.06em;
+    text-shadow: 0 2px 24px rgba(201,150,42,0.5), 0 0 60px rgba(155,28,28,0.4);
+    line-height:1.2;
+  }
+  header h1 span { color:#fff; font-style:italic; font-family:'Playfair Display', serif; }
+  header p.subtitle {
+    margin-top:10px;
+    font-size:1.05rem;
+    color:rgba(255,240,215,0.7);
+    letter-spacing:0.04em;
+    font-style:italic;
+  }
+
+  .divider {
+    margin:20px auto 0;
+    width:160px; height:2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    position:relative; z-index:10;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:16px;
+    padding:0 24px 24px;
+  }
+  .stat-chip {
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(201,150,42,0.25);
+    border-radius:40px;
+    padding:6px 16px;
+    font-family:'Cinzel', serif;
+    font-size:0.78rem;
+    color:rgba(255,240,215,0.85);
+    letter-spacing:0.05em;
+  }
+  .stat-dot { width:8px; height:8px; border-radius:50%; }
+  .stat-dot.void     { background:#C0392B; box-shadow:0 0 6px #C0392B; }
+  .stat-dot.voidable { background:#C9962A; box-shadow:0 0 6px #C9962A; }
+  .stat-dot.valid    { background:#2E7D32; box-shadow:0 0 6px #2E7D32; }
+
+  /* ── FILTERS ── */
+  .controls {
+    position:relative; z-index:10;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:10px;
+    padding:0 24px 32px;
+  }
+  .filter-btn {
+    padding:9px 22px;
+    border-radius:40px;
+    border:1.5px solid rgba(201,150,42,0.4);
+    background:rgba(255,255,255,0.05);
+    color:rgba(255,240,215,0.8);
+    font-family:'Cinzel', serif;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    backdrop-filter:blur(4px);
+  }
+  .filter-btn:hover { border-color:var(--gold); color:var(--gold-lt); background:rgba(201,150,42,0.08); }
+  .filter-btn.active {
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#1a0000;
+    font-weight:700;
+    box-shadow: 0 4px 16px rgba(201,150,42,0.3);
+  }
+  .filter-btn.void-btn.active   { background:var(--crimson-lt); border-color:var(--crimson-lt); color:#fff; box-shadow:0 4px 16px rgba(192,57,43,0.4); }
+  .filter-btn.voidable-btn.active { background:#B8860B; border-color:#B8860B; color:#fff; box-shadow:0 4px 16px rgba(184,134,11,0.4); }
+  .filter-btn.valid-btn.active  { background:#2E7D32; border-color:#2E7D32; color:#fff; box-shadow:0 4px 16px rgba(46,125,50,0.4); }
+
+  /* ── CARD COUNT ── */
+  .card-count {
+    position:relative; z-index:10;
+    text-align:center;
+    color:rgba(255,240,215,0.5);
+    font-size:0.85rem;
+    margin-bottom:28px;
+    letter-spacing:0.05em;
+    font-style:italic;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    position:relative; z-index:10;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:24px;
+    padding:0 24px 60px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+
+  /* ── FLASHCARD ── */
+  .card-wrap {
+    width:var(--card-w);
+    height:var(--card-h);
+    perspective:1400px;
+    cursor:pointer;
+    animation: cardIn 0.5s ease both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(30px) scale(0.95); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .card-wrap.hidden { display:none; }
+
+  .card-inner {
+    position:relative; width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);
+    border-radius:18px;
+  }
+  .card-wrap.flipped .card-inner { transform:rotateY(180deg); }
+
+  .card-face {
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:18px;
+    overflow:hidden;
+  }
+
+  /* FRONT */
+  .card-front {
+    background:var(--cream);
+    border:1.5px solid rgba(155,28,28,0.15);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+    display:flex; flex-direction:column;
+    transition:box-shadow 0.3s ease;
+  }
+  .card-wrap:hover .card-front {
+    box-shadow: 0 12px 48px rgba(0,0,0,0.6), 0 4px 16px rgba(201,150,42,0.15), 0 0 0 1px rgba(201,150,42,0.2);
+  }
+
+  .card-front-header {
+    background:linear-gradient(135deg, var(--crimson-dk) 0%, var(--crimson) 100%);
+    padding:14px 18px 12px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .card-num {
+    font-family:'Cinzel', serif;
+    font-size:0.72rem;
+    color:rgba(255,240,215,0.65);
+    letter-spacing:0.1em;
+  }
+  .card-tag {
+    font-family:'Cinzel', serif;
+    font-size:0.62rem;
+    letter-spacing:0.08em;
+    padding:3px 10px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.25);
+    color:rgba(255,240,215,0.8);
+  }
+
+  .seal-area {
+    display:flex; justify-content:center; align-items:center;
+    padding:20px 0 10px;
+  }
+  .seal {
+    width:52px; height:52px;
+    border-radius:50%;
+    background: conic-gradient(var(--crimson-dk), var(--crimson), var(--crimson-lt), var(--crimson), var(--crimson-dk));
+    border:3px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+    box-shadow: 0 0 0 2px var(--crimson-dk), 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  .card-front-body {
+    padding:0 22px 18px;
+    flex:1;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .situation-label {
+    font-family:'Cinzel', serif;
+    font-size:0.62rem;
+    color:var(--crimson);
+    letter-spacing:0.12em;
+    margin-bottom:10px;
+    text-transform:uppercase;
+  }
+  .situation-text {
+    font-size:1.05rem;
+    line-height:1.65;
+    color:#2a0a0a;
+    font-weight:400;
+  }
+
+  .card-front-footer {
+    padding:12px 22px 16px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    border-top:1px solid rgba(155,28,28,0.1);
+  }
+  .flip-hint {
+    font-size:0.78rem;
+    color:rgba(100,20,20,0.55);
+    font-style:italic;
+    letter-spacing:0.03em;
+  }
+  .flip-icon { font-size:0.9rem; animation:flipWiggle 2.5s ease-in-out infinite; }
+  @keyframes flipWiggle {
+    0%,100% { transform:rotateY(0deg); }
+    40%     { transform:rotateY(180deg); }
+    50%     { transform:rotateY(180deg); }
+    90%     { transform:rotateY(0deg); }
+  }
+
+  /* BACK */
+  .card-back {
+    transform:rotateY(180deg);
+    background:var(--cream);
+    border:1.5px solid rgba(155,28,28,0.15);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column;
+  }
+
+  .verdict-banner {
+    padding:16px 20px 14px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    position:relative;
+  }
+  .verdict-banner.void     { background:linear-gradient(135deg,#5C0000,#8B0000); }
+  .verdict-banner.voidable { background:linear-gradient(135deg,#5C3A00,#8B5E00); }
+  .verdict-banner.valid    { background:linear-gradient(135deg,#0A3A12,#1B5E20); }
+
+  .verdict-badge {
+    font-family:'Cinzel', serif;
+    font-size:1.05rem;
+    font-weight:700;
+    letter-spacing:0.12em;
+    color:#fff;
+    text-shadow:0 1px 8px rgba(0,0,0,0.5);
+  }
+  .verdict-icon { font-size:1.3rem; }
+
+  .card-back-body {
+    padding:14px 18px;
+    flex:1;
+    overflow-y:auto;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .card-back-body::-webkit-scrollbar { width:4px; }
+  .card-back-body::-webkit-scrollbar-thumb { background:rgba(155,28,28,0.3); border-radius:4px; }
+
+  .back-section { display:flex; flex-direction:column; gap:4px; }
+  .back-label {
+    font-family:'Cinzel', serif;
+    font-size:0.6rem;
+    letter-spacing:0.1em;
+    color:var(--crimson);
+    text-transform:uppercase;
+  }
+  .back-text {
+    font-size:0.92rem;
+    line-height:1.55;
+    color:#2a0a0a;
+  }
+  .article-pill {
+    display:inline-block;
+    background:rgba(155,28,28,0.1);
+    border:1px solid rgba(155,28,28,0.25);
+    border-radius:6px;
+    padding:2px 10px;
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--crimson);
+    font-family:'Cinzel', serif;
+    letter-spacing:0.04em;
+  }
+
+  .source-link {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:6px;
+    font-size:0.82rem;
+    color:var(--crimson);
+    text-decoration:none;
+    border-bottom:1px dashed rgba(155,28,28,0.4);
+    transition:color 0.2s, border-color 0.2s;
+    font-style:italic;
+  }
+  .source-link:hover { color:var(--gold); border-color:var(--gold); }
+
+  .card-back-footer {
+    padding:10px 18px 14px;
+    border-top:1px solid rgba(155,28,28,0.1);
+    display:flex; justify-content:center;
+  }
+  .flip-back-btn {
+    font-size:0.78rem;
+    color:rgba(100,20,20,0.55);
+    font-style:italic;
+  }
+
+  /* ── FLOATING PARTICLES ── */
+  .particles { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .particle {
+    position:absolute;
+    border-radius:50%;
+    opacity:0;
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform:translateY(110vh) rotate(0deg) scale(0.5); opacity:0; }
+    10%  { opacity:0.6; }
+    90%  { opacity:0.3; }
+    100% { transform:translateY(-10vh) rotate(720deg) scale(1.2); opacity:0; }
+  }
+
+  /* Decorative geometric shapes */
+  .geo-shape {
+    position:fixed;
+    pointer-events:none;
+    opacity:0.04;
+    animation:geoFloat ease-in-out infinite alternate;
+  }
+  @keyframes geoFloat {
+    0%   { transform:rotate(0deg) scale(1); }
+    100% { transform:rotate(30deg) scale(1.1); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position:relative; z-index:10;
+    text-align:center;
+    padding:32px 24px;
+    border-top:1px solid rgba(201,150,42,0.15);
+    color:rgba(255,240,215,0.35);
+    font-size:0.82rem;
+    font-style:italic;
+  }
+  footer a { color:rgba(201,150,42,0.55); text-decoration:none; }
+  footer a:hover { color:var(--gold-lt); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:400px) {
+    :root { --card-w:300px; --card-h:500px; }
+  }
+
+  /* Shimmer on hover */
+  .card-wrap:hover .card-front::before {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(135deg, transparent 40%, rgba(201,150,42,0.04) 50%, transparent 60%);
+    border-radius:18px;
+    pointer-events:none;
+    animation:shimmer 1.5s ease infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position:-200% center; }
+    100% { background-position:200% center; }
+  }
+
+  /* Progress indicator */
+  .progress-wrap {
+    position:relative; z-index:10;
+    max-width:500px; margin:0 auto 24px;
+    padding:0 24px;
+  }
+  .progress-bar {
+    height:3px; border-radius:2px;
+    background:rgba(255,255,255,0.08);
+    overflow:hidden;
+  }
+  .progress-fill {
+    height:100%;
+    background:linear-gradient(90deg, var(--crimson), var(--gold));
+    border-radius:2px;
+    transition:width 0.4s ease;
+  }
+  .progress-label {
+    text-align:center;
+    color:rgba(255,240,215,0.4);
+    font-size:0.78rem;
+    margin-top:6px;
+    font-style:italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Geometric shapes -->
+<svg class="geo-shape" style="width:400px;height:400px;top:-100px;left:-100px;animation-duration:18s;" viewBox="0 0 100 100">
+  <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="#C9962A" stroke-width="1"/>
+</svg>
+<svg class="geo-shape" style="width:300px;height:300px;bottom:-50px;right:-50px;animation-duration:22s;opacity:0.05;" viewBox="0 0 100 100">
+  <rect x="10" y="10" width="80" height="80" fill="none" stroke="#9B1C1C" stroke-width="1" transform="rotate(45 50 50)"/>
+</svg>
+<svg class="geo-shape" style="width:200px;height:200px;top:40%;right:5%;animation-duration:15s;opacity:0.035;" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#C9962A" stroke-width="1.5"/>
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#C9962A" stroke-width="1"/>
+</svg>
+
+<header>
+  <div class="header-crest">★</div>
+  <h1>Philippine <span>Family Code</span><br>Marriage Flashcards</h1>
+  <p class="subtitle">Executive Order No. 209 · 50 Confusing Real-Life Situations</p>
+  <div class="divider"></div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-chip"><span class="stat-dot void"></span>Void Marriage</div>
+  <div class="stat-chip"><span class="stat-dot voidable"></span>Voidable Marriage</div>
+  <div class="stat-chip"><span class="stat-dot valid"></span>Valid Marriage</div>
+</div>
+
+<div class="controls">
+  <button class="filter-btn active" data-filter="all">All 50</button>
+  <button class="filter-btn void-btn" data-filter="void">Void</button>
+  <button class="filter-btn voidable-btn" data-filter="voidable">Voidable</button>
+  <button class="filter-btn valid-btn" data-filter="valid">Valid</button>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label" id="progressLabel">0 of 50 cards flipped</div>
+</div>
+
+<div class="card-count" id="cardCount">Showing all 50 situations · Click a card to reveal the answer</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  Source: <a href="https://lawphil.net/statutes/execord/eo1987/eo_209_1987.html" target="_blank">Family Code of the Philippines (E.O. 209, as amended)</a> ·
+  Always consult a licensed attorney for legal advice.
+</footer>
+
+<script>
+const BASE_URL = "https://lawphil.net/statutes/execord/eo1987/eo_209_1987.html";
+
+const cards = [
+  {
+    id:1,
+    emoji:"💒",
+    situation:"A 17-year-old boy, with his parents' full written consent and blessing, marries his 20-year-old girlfriend in a grand church wedding with all other legal requirements properly met. Is this marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO.",
+    article:"Article 35(1)",
+    reason:"The Family Code requires both parties to be at least 18 years of age to contract a valid marriage. Parental consent cannot cure the absence of legal age. Age is an essential requisite under Art. 2, and its absence renders the marriage void regardless of consent.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:2,
+    emoji:"🏠",
+    situation:"A couple who lived together openly as husband and wife for exactly 5 years — with no legal impediment to marry each other during that entire period — decides to formalize their union in a simple ceremony without obtaining a marriage license. Is this marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID.",
+    article:"Article 34",
+    reason:"Art. 34 exempts from the marriage license requirement those who have lived together as husband and wife for at least five years with no legal impediment. The 5-year period must be unbroken and both parties must have been free to marry each other throughout. All other requirements must still be met.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:3,
+    emoji:"💔",
+    situation:"A marriage ceremony is in full swing when a woman bursts in holding two small children, claiming to be the groom's legal wife. The ceremony continues and the marriage is completed. The first wife's claim later proves true. Is the second marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO — a bigamous marriage.",
+    article:"Article 35(4)",
+    reason:"A bigamous or polygamous marriage is explicitly void from the beginning under Art. 35(4). The existence of a prior valid marriage is an absolute legal impediment. The fact that the ceremony continued does not cure the defect. Criminal liability for bigamy (Art. 349, RPC) may also arise.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:4,
+    emoji:"📱",
+    situation:"A couple asks their best friend — who was 'ordained' online through a free internet ministry — to officiate their wedding. Both parties genuinely and in good faith believed he had the legal authority to solemnize marriages. Is their marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID due to the good faith exception.",
+    article:"Article 35(2)",
+    reason:"Art. 35(2) voids a marriage solemnized by an unauthorized person, BUT expressly excepts cases where either or both parties believed in good faith that the solemnizing officer had authority. Here, both parties acted in genuine good faith, saving the marriage. The officiant may face penalties, but the marriage stands.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:5,
+    emoji:"🤫",
+    situation:"A 19-year-old man secretly marries his girlfriend without his parents' knowledge or written consent. His parents discover the marriage weeks later and are furious. What is the legal status of this marriage?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE — not void, but annullable.",
+    article:"Article 45(1)",
+    reason:"Under Art. 45(1), a marriage where a party is 18–20 years old and married without parental consent is voidable, not void. The parents (or the party himself after turning 21) may file for annulment — but only if he has not freely cohabited with his wife after reaching 21. If he later cohabits freely, the defect is cured and the marriage becomes unassailable.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:6,
+    emoji:"📋",
+    situation:"A couple applies for and receives a valid marriage license. However, due to scheduling changes, their wedding is pushed back and the license expires three days before the ceremony. They proceed with the wedding using the expired license. Is the marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO.",
+    article:"Article 35(3)",
+    reason:"An expired marriage license is equivalent to no license at all. Art. 35(3) voids any marriage solemnized without a valid marriage license, except in cases expressly provided by law (Arts. 27–34). A marriage license is valid for 120 days from the date of issue (Art. 20). An expired license cannot satisfy the formal requisite of a valid marriage license.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:7,
+    emoji:"👯",
+    situation:"At the altar, a groom unknowingly exchanges vows with his fiancée's identical twin sister, who had swapped places with the real fiancée as a prank — but the ceremony was completed and a license was present. Is the marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO.",
+    article:"Article 35(5)",
+    reason:"Art. 35(5) voids marriages contracted through mistake of one contracting party as to the identity of the other. This is a case of mistaken identity — not a mere mistake in name or surname. The groom consented to marry a different person entirely. Consent given under such a fundamental identity error is not genuine consent under Art. 2(2).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:8,
+    emoji:"⚖️",
+    situation:"A man and woman cohabited for 5 years. However, during the first year of their cohabitation, the man was still legally married to a prior wife. That first marriage was subsequently annulled in the 2nd year. They now try to marry without a license, invoking the 5-year exception. Is their marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID — the 5-year exception does not apply.",
+    article:"Articles 34 & 35(3)",
+    reason:"Art. 34 requires that during the entire 5-year cohabitation period, there must be no legal impediment to marry. The existence of the prior valid marriage during the first year creates a legal impediment that breaks the continuity required. Since the exception does not apply, a marriage license is required — and absent one, the marriage is void under Art. 35(3).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:9,
+    emoji:"🧠",
+    situation:"A woman was legally declared mentally insane by a court two years before her wedding. On her wedding day, she appears completely lucid, coherent, and responsive. The ceremony proceeds normally. Is the marriage valid?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE.",
+    article:"Article 45(2)",
+    reason:"Under Art. 45(2), a marriage is voidable if either party was of unsound mind at the time of the marriage. The prior court declaration of insanity raises a strong presumption of incapacity. The burden falls on those asserting sanity to prove a lucid interval. If she was indeed in a lucid interval with genuine consent, an action can still be filed — though it may fail. The marriage is not void ab initio but is subject to annulment.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:10,
+    emoji:"🧬",
+    situation:"A couple married and lived happily together for 10 years before discovering, through a DNA test, that they share the same biological father — making them half-siblings (different mothers). What is the legal status of their marriage?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO — an incestuous marriage.",
+    article:"Article 37(1)",
+    reason:"Art. 37 declares incestuous marriages void, whether the relationship is legitimate or illegitimate. Half-siblings fall squarely under 'brothers and sisters, whether of the full or half blood.' The void status exists from the very beginning — the subsequent discovery does not create the void; it merely reveals it. The marriage was never legally valid.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:11,
+    emoji:"👨‍👧",
+    situation:"After his wife passed away, a step-father develops a romantic relationship with his adult step-daughter (whom he never legally adopted and has no blood relation to). They eventually decide to marry. Is this marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(2)",
+    reason:"Art. 38(2) explicitly voids marriages between step-parents and step-children, regardless of any absence of blood relation and regardless of whether the biological parent is still alive. The prohibition is rooted in public policy concerns about the integrity of family structure, not consanguinity. No blood relationship is necessary for this prohibition to apply.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:12,
+    emoji:"💐",
+    situation:"A man's son dies in an accident. After the mourning period, the bereaved father develops feelings for his late son's wife (his daughter-in-law). They fall deeply in love and decide to marry. Is this marriage legally valid in the Philippines?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(3)",
+    reason:"Art. 38(3) voids marriages between parents-in-law and children-in-law. This prohibition applies regardless of the death of the connecting spouse (the son). The familial relationship created by the original marriage survives the son's death for purposes of this prohibition. No blood relation is needed; the in-law relationship alone is sufficient to void the marriage.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:13,
+    emoji:"📜",
+    situation:"An adoptive father and his adopted daughter — now a grown adult — develop a genuine romantic relationship decades after the adoption. They apply for a marriage license and proceed to marry. Is this marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(4)",
+    reason:"Art. 38(4) explicitly prohibits and voids marriages between the adopting parent and the adopted child. This applies regardless of the adopted child's age at the time of marriage, the adult nature of the relationship, or even the termination of the adoption. The prohibition is permanent and rooted in public policy — not consanguinity — to preserve the integrity of the adoptive family.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:14,
+    emoji:"🌹",
+    situation:"Two first cousins — children of siblings — who grew up far apart and rarely saw each other, fall deeply in love as adults and decide to get married. They argue there is no blood-related illness risk and their love is genuine. Is their marriage legally permitted?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(1)",
+    reason:"Art. 38(1) voids marriages between collateral blood relatives, whether legitimate or illegitimate, up to the fourth civil degree. First cousins are in the fourth civil degree of collateral relationship (self → parent → grandparent → parent's sibling → cousin = 4 steps). The prohibition is absolute regardless of love, consent, or biological arguments.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:15,
+    emoji:"🔫",
+    situation:"During a wedding ceremony, the groom is covertly threatened at gunpoint by armed members of the bride's family in the sacristy before the ceremony. Fearing for his life, he proceeds to say 'I do.' The threat was never disclosed publicly. Is the marriage valid?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE.",
+    article:"Article 45(4)",
+    reason:"Art. 45(4) allows annulment when consent was obtained by force, intimidation, or undue influence. Coercion by deadly threat qualifies as both force and intimidation under this provision. However, the action must be filed within 5 years from the time the force or intimidation ceased (Art. 47[4]). If the groom freely cohabited after the threat ceased, the defect may be ratified.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:16,
+    emoji:"🤰",
+    situation:"A woman was secretly pregnant by another man when she married her husband. She never disclosed this pregnancy to him. They lived together and she gave birth. The husband only discovered the truth 2 years later via a paternity test. Can he annul?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE based on fraud.",
+    article:"Articles 45(3) & 46(2)",
+    reason:"Art. 46(2) explicitly lists as fraud: 'concealment by the wife of the fact that at the time of the marriage, she was pregnant by a man other than her husband.' This constitutes fraud under Art. 45(3). The husband must file within 5 years after discovery of the fraud (Art. 47[3]), and must not have freely cohabited with the wife after discovering the truth.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:17,
+    emoji:"⚕️",
+    situation:"Before their wedding, a man honestly and openly tells his fiancée that he has HIV — a serious, incurable condition. She loves him deeply and agrees to marry him despite knowing this. Years later, can she still file for annulment based on his HIV?",
+    verdict:"voidable",
+    answer:"This marriage is still VOIDABLE — disclosure does NOT cure the defect.",
+    article:"Article 45(6)",
+    reason:"Art. 45(6) allows annulment if 'either party was afflicted with a sexually-transmissible disease found to be serious and appears to be incurable.' Unlike fraud (Art. 45[3]), Art. 45(6) does not require concealment — the mere existence of the serious, incurable STD at the time of marriage is a ground for annulment, even if disclosed. However, the other party must file within 5 years from the marriage (Art. 47[6]).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:18,
+    emoji:"🔍",
+    situation:"A man's wife disappears without a trace. After 7 years with no news, he falls in love again and marries a new woman — without going to court to have his first wife declared presumptively dead. Years later, the first wife is confirmed dead. Is the second marriage valid?",
+    verdict:"void",
+    answer:"This second marriage is VOID.",
+    article:"Article 41",
+    reason:"Art. 41 permits a subsequent marriage only after the absent spouse has been declared presumptively dead by a judgment of the competent court. A mere 7-year disappearance, without a judicial declaration, does not automatically dissolve the first marriage. The second marriage contracted without such declaration is bigamous and void under Art. 35(4) in relation to Art. 41.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:19,
+    emoji:"🏥",
+    situation:"A terminally ill cancer patient, unable to leave the hospital and not expected to survive the week, marries his long-time partner in his hospital room. Due to the emergency, they have no time to secure a marriage license. Is this marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID — it is a marriage in articulo mortis.",
+    article:"Article 27",
+    reason:"Art. 27 provides that if either party is at the point of death, a marriage may be solemnized without necessity of a marriage license by the priest, minister, or civil authority attending to the dying person. All other requisites (authority of the solemnizing officer, marriage ceremony, and witnesses) must still be complied with. The marriage remains valid even if the ailing party subsequently survives.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:20,
+    emoji:"🏛️",
+    situation:"In a small barangay, the couple asks their beloved barangay captain — who genuinely but mistakenly believes he has authority to solemnize marriages — to officiate their wedding. Both the couple and the barangay captain truly believe he is authorized. Is the marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID — the good faith exception applies.",
+    article:"Article 35(2)",
+    reason:"Art. 35(2) provides that if the marriage is solemnized by someone without legal authority, it is void — UNLESS either or both contracting parties believed in good faith that the solemnizing officer had authority. Here, both parties acted in genuine good faith. The barangay captain faces administrative/criminal liability, but the marriage itself is protected by the good faith exception.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:21,
+    emoji:"✈️",
+    situation:"A Filipino national travels to Japan and marries a Japanese citizen in a ceremony that strictly follows all Japanese marriage laws and formalities. No Philippine marriage license was obtained. Is this marriage valid and recognized in the Philippines?",
+    verdict:"valid",
+    answer:"This marriage is VALID and recognized in the Philippines.",
+    article:"Article 26(1)",
+    reason:"Art. 26(1) provides that all marriages solemnized outside the Philippines in accordance with the laws in force in the country where they were solemnized, and valid there as such, shall also be valid in the Philippines. The exception is if the marriage is void under Philippine law for other reasons (e.g., bigamy, incest, psychological incapacity, etc.).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:22,
+    emoji:"🌍",
+    situation:"A Filipina marries an American citizen. Later, the American husband files for and obtains a valid divorce in the United States. He is now legally divorced under US law. Can the Filipina legally remarry in the Philippines?",
+    verdict:"valid",
+    answer:"The Filipina may VALIDLY remarry in the Philippines.",
+    article:"Article 26(2)",
+    reason:"Art. 26(2) provides that where a valid divorce is obtained abroad by the alien spouse, the Filipino spouse shall have the capacity to remarry under Philippine law. The alien must have been the one to obtain the divorce, and it must be valid under the foreign law. The Filipino spouse must first obtain judicial recognition of the foreign divorce decree in Philippine courts before remarrying.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:23,
+    emoji:"🧩",
+    situation:"A man and woman marry. Years later, the wife discovers that her husband — from the very beginning of their marriage — has been completely incapable of fulfilling his duties as a spouse due to a grave psychological condition that existed before the wedding. What is the status of their marriage?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO.",
+    article:"Article 36",
+    reason:"Art. 36 declares void a marriage where one party was psychologically incapacitated to comply with the essential marital obligations at the time of the celebration. The psychological incapacity must be (a) existing at the time of marriage, (b) juridically antecedent (rooted in history), (c) grave, and (d) permanent or incurable. The Supreme Court has further refined these elements through various landmark cases.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:24,
+    emoji:"🎭",
+    situation:"At a costume party, two friends dare each other to 'get married as a joke.' A real priest who happens to be a guest performs the ceremony — they have their valid marriage license with them and two adult witnesses are present. Both say 'I do' laughing. Is this a legally valid marriage?",
+    verdict:"void",
+    answer:"This marriage is VOID — there was no genuine consent.",
+    article:"Article 2(2) & Article 4",
+    reason:"Art. 2(2) requires that consent must be freely given by both contracting parties. Consent made in jest — without any intention of creating a real marital bond — is not genuine consent. The Supreme Court has held that the essence of marriage requires a serious intention by both parties. The absence of a genuine essential requisite (consent) renders the marriage void ab initio under Art. 4.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:25,
+    emoji:"🍺",
+    situation:"During his wedding ceremony, the groom had consumed so much alcohol that he could not later recall saying 'I do' or any part of the ceremony. Witnesses confirm he verbally participated but was visibly impaired. Is the marriage valid?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE.",
+    article:"Article 45(2)",
+    reason:"Art. 45(2) provides that a marriage is voidable if either party was of unsound mind at the time of the marriage. Extreme intoxication that eliminates mental comprehension and voluntariness constitutes 'unsound mind' at the time of the ceremony. However, the marriage is voidable — not void — and may be ratified if the party, after sobering up, freely cohabited with the other (Art. 45[2] proviso).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:26,
+    emoji:"🏥",
+    situation:"A man was physically incapable of consummating the marriage due to a pre-existing condition he was aware of. He never told his fiancée before their wedding. After marriage, his wife discovers the truth. Can she have the marriage annulled?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE.",
+    article:"Article 45(5)",
+    reason:"Art. 45(5) allows annulment if 'either party was physically incapable of consummating the marriage with the other, and such incapacity continues and appears to be incurable.' The incapacity must exist at the time of marriage and be permanent. Importantly, this is NOT about sterility or inability to have children — it refers specifically to the inability to engage in sexual intercourse (consummation). The action prescribes 5 years from the marriage (Art. 47[5]).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:27,
+    emoji:"⚖️",
+    situation:"A retired judge — whose judicial commission had lapsed one week prior — solemnizes his nephew's wedding without informing anyone of his retired status. Both the bride and groom genuinely believe he is a sitting judge with full authority. Is the marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID under the good faith exception.",
+    article:"Article 35(2)",
+    reason:"Art. 35(2) provides the good faith exception: a marriage solemnized by an unauthorized person is void only if the parties did not believe in good faith that the officer had authority. Since both parties genuinely believed the retired judge was still an active sitting judge, their good faith protects the marriage. The retired judge may be held liable, but the marriage stands.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:28,
+    emoji:"🎭",
+    situation:"Before marriage, a wife concealed from her husband that she had been struggling with drug addiction for years — a condition that existed at the time they wed. The husband discovers this a year into the marriage. Can he seek annulment?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE based on fraud.",
+    article:"Articles 45(3) & 46(4)",
+    reason:"Art. 46(4) expressly lists 'concealment of drug addiction, habitual alcoholism, homosexuality or lesbianism existing at the time of the marriage' as constituting fraud under Art. 45(3). The husband must file within 5 years of discovering the fraud (Art. 47[3]) and must not have freely cohabited after learning the truth. Note: the condition must have existed at the time of the marriage.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:29,
+    emoji:"👁️",
+    situation:"A wedding ceremony takes place with all proper requirements — valid license, authorized priest — but only ONE witness was present and signed the marriage contract, instead of the required two. Is the marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID, but with an irregularity.",
+    article:"Article 4(2) & Article 3(3)",
+    reason:"Art. 3 lists 'two witnesses of legal age' as part of the formal requisite of the ceremony. However, Art. 4(2) provides that 'a defect in any of the essential requisites shall not affect the validity of the marriage.' Most legal authorities hold that having only one witness is an irregularity — not the complete absence — of the formal requisite. The marriage is valid, but the solemnizing officer and the witness present may face civil, criminal, and administrative liability.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:30,
+    emoji:"🌳",
+    situation:"A man wants to marry his first cousin once removed — the daughter of his first cousin (his second cousin, in common parlance). They are in the 5th civil degree of collateral relationship. Is this marriage prohibited under the Family Code?",
+    verdict:"valid",
+    answer:"This marriage is VALID — the prohibition does not apply.",
+    article:"Article 38(1)",
+    reason:"Art. 38(1) voids marriages between collateral blood relatives up to the 4th civil degree only. First cousins once removed (the child of one's first cousin) are in the 5th civil degree of collateral relationship. Since the Family Code prohibition stops at the 4th civil degree, this relationship falls outside the prohibited range. The marriage may proceed legally.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:31,
+    emoji:"📅",
+    situation:"A couple cohabited for 5 years, during which the first year had one of them still legally married to a prior spouse. That marriage was subsequently annulled. They then try to marry without a license, claiming the 5-year exception. Is this valid?",
+    verdict:"void",
+    answer:"This marriage is VOID — the 5-year exception is inapplicable.",
+    article:"Articles 34 & 35(3)",
+    reason:"Art. 34 requires that during the entire 5-year period of cohabitation, neither party must have had any legal impediment to marry. An existing prior marriage during the first year of cohabitation constitutes a legal impediment that breaks the continuity requirement. The defect cannot be cured by the subsequent annulment of the prior marriage. Without a valid license, the marriage is void under Art. 35(3).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:32,
+    emoji:"📁",
+    situation:"A court declares a man's first marriage void. Before the court decision becomes final and executory, the man immediately remarries, believing the court's pronouncement is enough. Is the second marriage valid?",
+    verdict:"void",
+    answer:"This second marriage is VOID.",
+    article:"Article 40",
+    reason:"Art. 40 is explicit: 'The absolute nullity of a previous marriage may be invoked for purposes of remarriage on the basis solely of a final judgment declaring such previous marriage void.' Remarrying before the judgment becomes final and executory violates Art. 40 and renders the subsequent marriage void. Criminal liability for bigamy may also arise.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:33,
+    emoji:"👨‍👩‍👧",
+    situation:"An adopted son who grew up with his adoptive family falls in love with the biological (legitimate) daughter of his adoptive parents — his adoptive sister. They are not blood relatives at all. Can they legally marry?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(7)",
+    reason:"Art. 38(7) explicitly voids marriages between an adopted child and a legitimate child of the adopter. This applies even though they share no blood relation. The law protects the integrity of the adoptive family structure by treating this relationship similarly to that of siblings. The prohibition is permanent and cannot be waived.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:34,
+    emoji:"🙏",
+    situation:"A parish priest forgot to ask the couple to present their marriage license before the ceremony — he simply proceeded with the solemnization. The couple did in fact have a valid, unexpired marriage license — they just never showed it. Is the marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID.",
+    article:"Article 4(2)",
+    reason:"Art. 4(2) provides that 'a defect in any of the essential or formal requisites shall not affect the validity of the marriage.' The marriage license existed and was valid — its non-presentation to the priest is merely an irregularity in complying with the formal requisite, not its absence. The license was present; only its verification was skipped. The marriage stands, though the priest may face administrative liability.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:35,
+    emoji:"👨‍👩‍👦",
+    situation:"A 20-year-old woman marries her boyfriend. Her parents were physically present at the wedding reception and gave their verbal blessings — but they never signed any written parental consent form or affidavit. Is the marriage valid?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE.",
+    article:"Articles 14 & 45(1)",
+    reason:"Art. 14 requires that parental consent for those aged 18–21 be manifested in writing (a signed consent form or affidavit made before two witnesses). Verbal blessing — even from physically present parents — does not satisfy the written consent requirement. The marriage is voidable under Art. 45(1). The parents or the 20-year-old herself (before turning 21, or within 5 years thereafter) may file for annulment.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:36,
+    emoji:"📄",
+    situation:"A couple appears before the Local Civil Registrar, signs all the necessary marriage documents, and is formally recorded as married — but no actual marriage ceremony took place: no exchange of vows, no 'I do's,' no ritual of any kind. Is this a valid marriage?",
+    verdict:"void",
+    answer:"This marriage is VOID AB INITIO.",
+    article:"Articles 3(3) & 4",
+    reason:"Art. 3(3) requires as a formal requisite: 'A marriage ceremony which takes place with the appearance of the contracting parties before the solemnizing officer and their personal declaration that they take each other as husband and wife in the presence of not less than two witnesses of legal age.' The complete absence of a ceremony means the formal requisite is absent — not merely defective — rendering the marriage void under Art. 4(1).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:37,
+    emoji:"👻",
+    situation:"A man's wife is declared presumptively dead by court order after 4 years of absence (she was a survivor of a maritime disaster). He remarries. Two years later, his first wife reappears — alive. What happens to the second marriage?",
+    verdict:"valid",
+    answer:"The second marriage REMAINS VALID.",
+    article:"Articles 41 & 43",
+    reason:"Art. 41 provides that a subsequent marriage contracted after a judicial declaration of presumptive death is valid — even if the absent spouse reappears. The reappearance does not automatically nullify the second marriage; rather, it gives rise to the special effects under Art. 43 (property regime terminates; donations by reason of marriage are revoked). The absent spouse must record the reappearance (Art. 42).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:38,
+    emoji:"🎖️",
+    situation:"During a declared zone of military operations, a military chaplain solemnizes the marriage of two soldiers without a marriage license, as obtaining one was impossible given the combat situation. Is this marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID.",
+    article:"Article 32",
+    reason:"Art. 32 provides that marriages in articulo mortis between passengers or crew members, or in a military zone of operations, may be solemnized without a marriage license by a military commander of a unit (when the chaplain is absent) or by a ship captain or airplane pilot. Military chaplains may also perform such marriages. The license requirement is waived given the impossibility and urgency of the situation.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:39,
+    emoji:"📋",
+    situation:"After the death of an adopter, the adopter's surviving spouse falls in love with and marries the adopted child. They have absolutely no blood relation, and the adoptive parent is deceased. Is this marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(5)",
+    reason:"Art. 38(5) explicitly voids marriages between 'the surviving spouse of the adopting parent and the adopted child.' The prohibition survives the death of the adopter. This is distinct from the prohibition in Art. 38(4) (adopter–adopted) and applies specifically to the surviving spouse. No blood relation is required; the family relationship created by adoption is sufficient to trigger the prohibition.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:40,
+    emoji:"🏛️",
+    situation:"Two Filipino nationals living in Paris, France, visit the Philippine Consulate and ask the Philippine Consul to solemnize their marriage. The consul officiates the ceremony following Philippine law. Is this marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID.",
+    article:"Article 10",
+    reason:"Art. 10 provides that marriages between Filipino citizens abroad may be solemnized by a consul-general, consul, or vice-consul of the Republic of the Philippines. The marriage must comply with the requirements of Philippine law, including obtaining a marriage license (or qualifying for an exception) and the formal requisites under Arts. 2–3. Such consular marriages are expressly recognized.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:41,
+    emoji:"🌿",
+    situation:"A husband concealed from his wife that he had been struggling with drug addiction for years — including at the time of their wedding. His wife only discovers this a year into the marriage. Is the marriage voidable?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE based on fraud.",
+    article:"Articles 45(3) & 46(4)",
+    reason:"Art. 46(4) lists 'concealment of drug addiction, habitual alcoholism, homosexuality or lesbianism existing at the time of the marriage' as constituting fraud under Art. 45(3). The fraud ground requires: (a) the condition existed at the time of marriage, (b) it was concealed, and (c) the other party did not freely cohabit after discovering the truth. The wife must file within 5 years of discovering the fraud.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:42,
+    emoji:"🗺️",
+    situation:"A groom, working abroad, cannot travel home for the wedding. He sends a trusted representative (proxy) to stand in for him at the ceremony. The bride and proxy exchange vows. The bride later finds out. Is this a valid marriage?",
+    verdict:"void",
+    answer:"This marriage is VOID — proxy marriages are not recognized.",
+    article:"Articles 3(3) & 6",
+    reason:"Art. 3(3) requires the contracting parties' personal appearance before the solemnizing officer. Art. 6 provides that 'the contracting parties must personally appear before the solemnizing officer.' Philippine law does not recognize proxy marriages. The absence of the groom's personal appearance means the formal requisite of the ceremony is absent, rendering the marriage void under Art. 4(1).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:43,
+    emoji:"⛪",
+    situation:"A godfather (ninong sa kasal) falls in love with his goddaughter from her wedding years ago. They are not blood relatives and have no adoptive relationship. They apply for a marriage license and plan to wed. Is there any legal prohibition under the Family Code?",
+    verdict:"valid",
+    answer:"This marriage is VALID — spiritual affinity is NOT a prohibited ground under the Family Code.",
+    article:"Articles 37 & 38 (a contrario)",
+    reason:"The old Civil Code of 1950 had a prohibition based on spiritual affinity (relationships through baptism/confirmation), but Executive Order No. 209 (the Family Code of 1987) deliberately removed this prohibition. Arts. 37 and 38 contain an exhaustive list of prohibited relationships — spiritual affinity (godparent/godchild) is not among them. The marriage is therefore legally permissible.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:44,
+    emoji:"🌐",
+    situation:"A Filipina wife obtained a divorce from her Filipino husband through a foreign court. Philippine law does not recognize divorce between two Filipino citizens. She remarries a new Filipino partner, believing the divorce made her free to do so. Is the second marriage valid?",
+    verdict:"void",
+    answer:"This second marriage is VOID — bigamous.",
+    article:"Articles 35(4) & 26",
+    reason:"Art. 26(2)'s exception — allowing remarriage after foreign divorce — applies ONLY when the divorce was obtained by the alien spouse. A divorce obtained by a Filipino spouse abroad is not recognized in the Philippines (Philippine law does not grant divorce to Filipino citizens). The first marriage subsists, making the second marriage bigamous and void under Art. 35(4). The first Filipino husband is still legally her husband.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:45,
+    emoji:"🏝️",
+    situation:"A couple living on a remote island with no means of transportation to reach a civil registrar decides to marry without obtaining a marriage license. They manage to find an authorized priest on the island to officiate. Is this marriage valid?",
+    verdict:"valid",
+    answer:"This marriage is VALID — the remote area exception applies.",
+    article:"Article 28",
+    reason:"Art. 28 provides that if either party's residence is so located that there is no means of transportation enabling them to appear before the local civil registrar, the marriage may be solemnized without a marriage license. The marriage must comply with all other requisites (authorized solemnizing officer, ceremony, two witnesses). The marriage must be registered with the civil registrar of the nearest municipality.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:46,
+    emoji:"🩺",
+    situation:"A husband concealed from his wife that he had a treatable, non-serious sexually transmitted infection at the time of their marriage — one that has since been completely cured. She later discovers this. Can she seek annulment?",
+    verdict:"voidable",
+    answer:"This marriage is VOIDABLE based on fraud — even for a curable STD.",
+    article:"Articles 45(3) & 46(3)",
+    reason:"Art. 46(3) lists as fraud: 'concealment of sexually transmissible disease, regardless of its nature, existing at the time of the marriage.' Unlike Art. 45(6) — which requires the STD to be serious and incurable — Art. 46(3) fraud applies to ANY STD, even a mild or curable one, as long as it was concealed and existed at the time of marriage. The wife has 5 years from discovery to file (Art. 47[3]).",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:47,
+    emoji:"🕌",
+    situation:"Two Muslim Filipinos in Mindanao marry following Islamic rites and customs in accordance with the Code of Muslim Personal Laws, without obtaining a Philippine civil marriage license. Is their marriage recognized under Philippine law?",
+    verdict:"valid",
+    answer:"This marriage is VALID and recognized under Philippine law.",
+    article:"Article 33",
+    reason:"Art. 33 provides that marriages among Mohammedans or pagans who live in the non-Christian provinces may be performed in accordance with their customs, rites, or practices. Furthermore, Presidential Decree No. 1083 (the Code of Muslim Personal Laws of the Philippines) governs Muslims and recognizes marriages solemnized according to Muslim law. These marriages are legally recognized without the need for a civil marriage license.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:48,
+    emoji:"🌱",
+    situation:"A man who is medically sterile — completely unable to father children — marries without disclosing his sterility to his wife. She later discovers this and, devastated, wants to annul the marriage because she deeply wanted children. Is the marriage annullable?",
+    verdict:"valid",
+    answer:"This marriage is VALID — sterility is NOT a ground for annulment.",
+    article:"Article 45(5) — a contrario",
+    reason:"Art. 45(5) allows annulment only if a party was 'physically incapable of consummating the marriage.' This provision refers specifically to the inability to engage in sexual intercourse (impotence), NOT to inability to procreate (sterility). Sterility does not prevent consummation. Furthermore, sterility is not listed under Art. 46 as a form of fraud. The failure to disclose sterility, while morally questionable, is not a recognized legal ground for annulment.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:49,
+    emoji:"🏛️",
+    situation:"A woman's first marriage was annulled by court decree. She wants to remarry, but in her excitement, she skips the requirements under Art. 52: she never registers the court's annulment decree, never has the property partition recorded, and never has her child's presumptive legitime delivered. She then remarries. Is this second marriage valid?",
+    verdict:"void",
+    answer:"This second marriage is VOID.",
+    article:"Articles 52, 53 & 35(6)",
+    reason:"Art. 52 requires that after annulment or declaration of nullity, the judgment, partition of property, and delivery of the children's presumptive legitimes must be recorded in the civil registry and registries of property. Art. 53 then states that 'either of the former spouses may marry again after compliance with the requirements of the immediately preceding Article; otherwise, the subsequent marriage shall be null and void.' Art. 35(6) classifies this as a void marriage.",
+    sourceUrl:`${BASE_URL}`
+  },
+  {
+    id:50,
+    emoji:"👨‍👩‍👦‍👦",
+    situation:"Two children adopted by the same couple grow up as siblings under the same adoptive parents. When they reach adulthood and live independently, they develop romantic feelings for each other and decide to marry. They share no blood relation whatsoever. Is this marriage valid?",
+    verdict:"void",
+    answer:"This marriage is VOID for reasons of public policy.",
+    article:"Article 38(8)",
+    reason:"Art. 38(8) explicitly voids marriages 'between adopted children of the same adopter.' The prohibition applies regardless of the complete absence of blood relation between the two adopted children. The Family Code treats adoptive siblings similarly to biological siblings for purposes of marriage prohibition, reflecting the policy of protecting the integrity and stability of the adoptive family as a fundamental social institution.",
+    sourceUrl:`${BASE_URL}`
+  }
+];
+
+// Verdict config
+const verdictConfig = {
+  void:     { label:'VOID MARRIAGE',     icon:'✗', color:'void' },
+  voidable: { label:'VOIDABLE MARRIAGE', icon:'⚠', color:'voidable' },
+  valid:    { label:'VALID MARRIAGE',    icon:'✓', color:'valid' }
+};
+
+let flippedCards = new Set();
+let currentFilter = 'all';
+
+function buildCards() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const filtered = currentFilter === 'all' ? cards : cards.filter(c => c.verdict === currentFilter);
+  
+  document.getElementById('cardCount').textContent =
+    currentFilter === 'all'
+      ? `Showing all ${filtered.length} situations · Click a card to reveal the answer`
+      : `Showing ${filtered.length} ${currentFilter} marriage situation${filtered.length !== 1 ? 's' : ''} · Click a card to reveal the answer`;
+
+  filtered.forEach((c, idx) => {
+    const vc = verdictConfig[c.verdict];
+    const div = document.createElement('div');
+    div.className = 'card-wrap';
+    div.style.animationDelay = `${idx * 0.04}s`;
+    div.dataset.id = c.id;
+    if (flippedCards.has(c.id)) div.classList.add('flipped');
+
+    div.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-front-header">
+            <span class="card-num">NO. ${String(c.id).padStart(2,'0')}</span>
+            <span class="card-tag">SITUATION</span>
+          </div>
+          <div class="seal-area">
+            <div class="seal">${c.emoji}</div>
+          </div>
+          <div class="card-front-body">
+            <div class="situation-label">⚖ Legal Scenario</div>
+            <div class="situation-text">${c.situation}</div>
+          </div>
+          <div class="card-front-footer">
+            <span class="flip-icon">↻</span>
+            <span class="flip-hint">Click to reveal the verdict</span>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="verdict-banner ${c.verdict}">
+            <span class="verdict-icon">${vc.icon}</span>
+            <span class="verdict-badge">${vc.label}</span>
+          </div>
+          <div class="card-back-body">
+            <div class="back-section">
+              <div class="back-label">📋 Verdict</div>
+              <div class="back-text">${c.answer}</div>
+            </div>
+            <div class="back-section">
+              <div class="back-label">📖 Legal Basis</div>
+              <div><span class="article-pill">${c.article}</span></div>
+            </div>
+            <div class="back-section">
+              <div class="back-label">💡 Reason</div>
+              <div class="back-text">${c.reason}</div>
+            </div>
+            <div class="back-section">
+              <div class="back-label">🔗 Source</div>
+              <a class="source-link" href="${c.sourceUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                Family Code of the Philippines (E.O. 209) — ${c.article} ↗
+              </a>
+            </div>
+          </div>
+          <div class="card-back-footer">
+            <span class="flip-back-btn">Click to see the situation again</span>
+          </div>
+        </div>
+      </div>`;
+
+    div.addEventListener('click', () => {
+      div.classList.toggle('flipped');
+      if (div.classList.contains('flipped')) flippedCards.add(c.id);
+      else flippedCards.delete(c.id);
+      updateProgress();
+    });
+
+    grid.appendChild(div);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = cards.length;
+  const pct = (flippedCards.size / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    `${flippedCards.size} of ${total} card${flippedCards.size !== 1 ? 's' : ''} flipped`;
+}
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    buildCards();
+  });
+});
+
+buildCards();
+
+// ── PARTICLE SYSTEM ──
+(function createParticles() {
+  const container = document.getElementById('particles');
+  const colors = [
+    'rgba(201,150,42,0.5)',
+    'rgba(155,28,28,0.45)',
+    'rgba(255,255,255,0.15)',
+    'rgba(192,57,43,0.4)',
+    'rgba(230,180,60,0.35)',
+  ];
+
+  for (let i = 0; i < 55; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() * 8 + 3;
+    p.className = 'particle';
+    p.style.cssText = `
+      width:${size}px;
+      height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:${-size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*18+12}s;
+      animation-delay:${Math.random()*18}s;
+      filter:blur(${Math.random()*2}px);
+    `;
+    container.appendChild(p);
+  }
+
+  // Petal-like shapes
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() * 12 + 6;
+    p.className = 'particle';
+    p.style.cssText = `
+      width:${size}px;
+      height:${size * 0.5}px;
+      border-radius:50% 0 50% 0;
+      left:${Math.random()*100}%;
+      bottom:${-size}px;
+      background:rgba(155,28,28,${Math.random()*0.3+0.1});
+      animation-duration:${Math.random()*20+15}s;
+      animation-delay:${Math.random()*20}s;
+      filter:blur(${Math.random()*1.5}px);
+    `;
+    container.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
